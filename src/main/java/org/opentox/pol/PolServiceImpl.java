@@ -1,9 +1,11 @@
 package org.opentox.pol;
 
 import java.io.InputStream;
+import java.util.Hashtable;
 
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -65,6 +67,31 @@ public class PolServiceImpl implements PolService {
 		}			
 	}	
 
+	public Response checkPols(@HeaderParam("subjectid") String subjectId, @QueryParam("uris") String queryURIs) throws WebApplicationException {
+	 	try {    
+	 		Hashtable uris = new Hashtable();
+		    uris.put("andi", new String("true"));
+		    uris.put("david", new String("true"));
+		    uris.put("micha", new String("false"));
+		    uris.put("christoph", new String("true"));
+		    
+		    String[] query_uris_arr = queryURIs.split(",");
+		    String query_result = "";
+		    
+		    for (String uri : query_uris_arr) {
+		    	query_result = query_result + uris.get(uri) + ",";
+		    }
+		    int length = query_result.length();
+		    query_result = query_result.substring(0, (length - 1));
+		    
+		   		    
+		    return Response.ok(subjectId + "\n" + queryURIs + "\n" + query_result + "\n").type("text/html").build(); 
+	} catch (Exception x) {
+		throw new WebApplicationException(Response.status(500).entity(x.getMessage()).type(mime_text).build());
+	}
+					
+	}
+	
 
 	/**
 	 *  Return a Pol resource in response to an HTTP request
@@ -87,13 +114,58 @@ public class PolServiceImpl implements PolService {
 			throw new WebApplicationException(Response.status(500).entity(x.getMessage()).type(mime_text).build());
 		}	
 	}
+	
+	/**
+	 *  Hello "name"
+	 *  
+	 *     GET /opensso-pol/{id}
+	 *  
+	 *  @param id
+	 *  @return Response
+	 */
+//	public Response getURIs(@HeaderParam("subjectid") String subjectId, @HeaderParam("uris") String headerURIs, @QueryParam("uris") String queryURIs)
+	public Response getURIs(@QueryParam("uris") String queryURIs)
+	throws WebApplicationException {
+		try {
+	    Hashtable uris = new Hashtable();
+	    uris.put("andi", new String("true"));
+	    uris.put("david", new String("true"));
+	    uris.put("micha", new String("false"));
+	    uris.put("christoph", new String("true"));
+	    
+	    String[] query_uris_arr = queryURIs.split(",");
+	    String query_result = "";
+	    
+	    for (String uri : query_uris_arr) {
+	    	query_result = query_result + uris.get(uri) + ",";
+	    }
+	    int length = query_result.length();
+	    query_result = query_result.substring(0, (length - 1));
+	    
+//	    String[] uris_arr = headerURIs.split(",");
+//	    String header_result = "";
+//	    
+//	    for (String uri : uris_arr) {
+//	    	header_result = header_result + uris.get(uri) + ",";
+//	    }
+//	    length = header_result.length();
+//	    header_result = header_result.substring(0, (length - 1));
+	    
+//	    return Response.ok(subjectId + "\n" + queryURIs + "\n" + query_result + "\n" +headerURIs + "\n" + header_result + "\n").type("text/html").build(); 
+	    return Response.ok(queryURIs + "\n" + query_result + "\n").type("text/html").build(); 
+		
+		} catch (Exception x) {
+			throw new WebApplicationException(Response.status(500).entity(x.getMessage()).type(mime_text).build());
+		}
+		
+	}
 		
 	/**
 	 *  Delete a Pol resource in response to an HTTP request
 	 *  
 	 *     DELETE /opensso-pol/{id}
 	 *    
-	 *  @param id
+	 *  @param id 
 	 */
 	public Response deletePol(@HeaderParam("subjectid") String subjectId, @HeaderParam("id") String id) 
 	throws WebApplicationException {

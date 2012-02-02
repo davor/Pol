@@ -19,6 +19,7 @@ import java.io.InputStream;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 
 // Content handlers 
@@ -58,6 +59,11 @@ public interface PolService {
 	@Produces(MediaType.APPLICATION_XML)
 	public Response createPol(@HeaderParam("subjectid") String subjectId, @Context UriInfo uriInfo, InputStream s) throws IOException, WebApplicationException;
 	
+//	@POST
+//	@Consumes(MediaType.TEXT_HTML)
+//	@Produces(MediaType.TEXT_HTML)
+//	public Response checkPols(@HeaderParam("subjectid") String subjectId, @QueryParam("uris") String queryURIs); // throws IOException, WebApplicationException;
+	
 
 	/**
 	 * Read a Pol resource. A client issues a 
@@ -75,24 +81,11 @@ public interface PolService {
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getPolID(@HeaderParam("subjectid") String subjectId, @HeaderParam("id") String id, @HeaderParam("uri") String uri, @HeaderParam("polnames") String polnames);
 	
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public Response getURIs(@QueryParam("uris") String queryURIs);
+//	public Response getURIs(@HeaderParam("subjectid") String subjectId, @HeaderParam("uris") String myURIs, @QueryParam("uris") String queryURIs);
 	
-	/**
-	 * Read the Pol resources. A client issues a 
-	 *
-	 *     GET /pols/
-	 *     Content-Type: application/xml
-	 *  
-	 * no uri: request the names of all policies for a given token
-	 * uri: request the owner of uri
-	 * uri + pols: request also the names of policies associated with uri
-	 * 
-	 * @return  response to be sent to the client
-	 *
-	 * @GET
-	 * @Produces(MediaType.APPLICATION_XML)
-	 * public Response getPol(@HeaderParam("subjectid") String subjectId, @HeaderParam("uri") String uri, @HeaderParam("polnames") String polnames);
-	 */
-		
 	
 	/**
 	 * Delete a Book resource. A client issues a 
